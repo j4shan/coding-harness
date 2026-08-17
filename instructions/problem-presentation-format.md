@@ -1,0 +1,54 @@
+# Problem presentation format
+
+One entry per finding.
+
+**Activate when:**
+
+- the user asks for an explanation of a problem;
+- composing defects found, problem descriptions, or open decisions into a review-request response
+  or a plan-execution summary;
+- presenting an open question, an issue resolved without asking, or a decision taken without
+  asking.
+
+**Do not activate when** the user asks for a simple or short explanation.
+
+Do not assume the reader's knowledge in code; illustrate the point using product or business
+concepts, requirements, constraints and documented terms. When code reference is needed, place
+citation at the end using this format `[<relative_file_path>/<file_name>: <line_#>]`.
+
+| Field | What goes in it |
+| --- | --- |
+| **Category** | one or more labels from the category table below |
+| **Scope** | one or more labels from the scope table below |
+| **Severity** | `blocking` · `degrading` · `cosmetic` |
+| **Components** | the layer — `front end` · `back end` · `data model` · `API / CLI` · `build pipeline` — then the area inside it (for a front-end concern, which screen or section), and the file |
+| **Problem Description** | three parts, in order: (1) `When: always` or `When: <condition>`; (2) a one-sentence problem summary; (3) one concise paragraph of detail. No cause here |
+| **Cause** | the mechanism, the wrong assumption, or the missing rule. **Prefer concision:** one sentence unless a second is load-bearing |
+| **Evidence** | problem and defect entries only. Required whenever the entry asserts a number |
+| **Action** | problem and defect entries only — what was done, or what is proposed |
+| **Proposed Action** | open-question entries only — the options, and a recommendation among them |
+| **Status** | `resolved` · `resolved, enforced forward` · `unresolved — decision needed` · `accepted — recorded in <id>` · `out of scope` |
+
+| Scope | Covers |
+| --- | --- |
+| `production` | code and assets that ship and run as the product |
+| `test` | code that verifies the product, and the fixtures it runs on |
+| `development tooling` | tools and config that generate or shape source and tests — codegen, scaffolding, linter and formatter config, developer utility scripts, and instructions or skills written for AI coding agents |
+| `build & deploy` | build, packaging, dependency, CI/CD and deployment config — the pipeline that transforms and ships what was authored |
+| `project documentation` | PRD, design specs, execution plans, defect reports, and reference material written for people |
+
+| Category | Covers |
+| --- | --- |
+| `scientific theory` | the analytical model, the objective or success measure it is judged by, and the semantics of a metric — including one whose definition has stopped matching what it measures |
+| `product design` | what the product should do or present, and how a reader experiences it |
+| `specification defect` | a requirement that is wrong, ambiguous, unimplementable, or contradicts another |
+| `coding implementation` | the code does not do what the specification says, or does it in a way that will not hold |
+| `security` | anything that widens what untrusted input can reach. Never folded into `coding implementation` |
+| `architecture / seam` | a contract or boundary between modules. The action is accept-or-redesign, not a local fix |
+| `process / planning` | the plan or task graph is wrong — work specified but unscheduled, or scheduled but unspecified |
+
+Two rules:
+
+- A pending decision never sits inside an entry about something already fixed. It stands alone.
+- A finding that contradicts an earlier "done" says so in **Action**, and corrects the earlier
+  claim in the same message.
