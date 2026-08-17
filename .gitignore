@@ -1,0 +1,43 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Agent client working directories — vendor copies are never committed here
+.claude/
+.cursor/
+.codex/
+
+# Node (MCP servers)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+dist/
+build/
+
+# Python (skill scripts, MCP servers)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets and local environment — never commit credentials for an MCP server
+.env
+.env.*
+*.local
+secrets/
+*.pem
+*.key
+
+# Logs
+*.log
