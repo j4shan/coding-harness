@@ -1,20 +1,33 @@
 # Problem presentation format
 
-One entry per finding.
+**Objective.** Report every problem, defect and open decision in one fixed structure, so the
+reader can tell at a glance what still needs their attention, how bad it is, and which part of the
+system is at risk.
 
-**Activate when:**
+**Your tasks.** Decide whether this format applies, then compose one entry per finding using the
+fields below.
+
+## 1. Decide whether to use this format
+
+Use it when any of these hold:
 
 - the user asks for an explanation of a problem;
-- composing defects found, problem descriptions, or open decisions into a review-request response
-  or a plan-execution summary;
-- presenting an open question, an issue resolved without asking, or a decision taken without
-  asking.
+- you are composing defects found, problem descriptions, or open decisions into a review-request
+  response or a plan-execution summary;
+- you are presenting an open question, an issue resolved without asking, or a decision taken
+  without asking.
 
-**Do not activate when** the user asks for a simple or short explanation.
+Do not use it when the user asks for a simple or short explanation.
 
-Do not assume the reader's knowledge in code; illustrate the point using product or business
-concepts, requirements, constraints and documented terms. When code reference is needed, place
-citation at the end using this format `[<relative_file_path>/<file_name>: <line_#>]`.
+## 2. Compose the entry
+
+Write one entry per finding.
+
+Do not assume the reader's knowledge in code. Illustrate the point using product or business
+concepts, requirements, constraints and documented terms. When you need a code reference, place
+the citation at the end of the field in this format: `[<relative_file_path>/<file_name>: <line_#>]`.
+
+Fill these fields.
 
 | Field | What goes in it |
 | --- | --- |
