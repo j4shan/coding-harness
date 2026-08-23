@@ -2,10 +2,10 @@
 
 **Objective.** Report every problem, defect and open decision in one fixed structure, so the
 reader can tell at a glance what still needs their attention, how bad it is, and which part of the
-system is at risk.
+system is at risk. Number every finding so later messages can cite it.
 
-**Your tasks.** Decide whether this format applies, then compose one entry per finding using the
-fields below.
+**Your tasks.** Decide whether this format applies, then number each finding and compose one
+entry per finding using the fields and layout below.
 
 ## 1. Decide whether to use this format
 
@@ -21,16 +21,51 @@ Do not use it when the user asks for a simple or short explanation.
 
 ## 2. Compose the entry
 
-Write one entry per finding.
+Write one entry per finding. Give every entry a unique ID `P<n>`. Number from `P1` with no
+gaps and no reuse. When this message adds findings to a list already numbered in the
+conversation, continue from the next unused n. Cite a finding by its ID, never by order or
+paraphrase.
 
 Do not assume the reader's knowledge in code. Illustrate the point using product or business
 concepts, requirements, constraints and documented terms. When you need a code reference, place
 the citation at the end of the field in this format: `[<relative_file_path>/<file_name>: <line_#>]`.
 
+Render the list in this exact shape. Write a markdown thematic break (`---` on its own line)
+before the first entry, between every pair of entries, and after the last entry. Never omit a
+break because there is only one finding. Never write two breaks in a row.
+
+```
+---
+
+**P1**
+
+**Category:** …
+**Scope:** …
+**Severity:** …
+**Components:** …
+**Problem Description:** …
+**Cause:** …
+**Evidence:** …
+**Action:** …
+**Status:** …
+
+---
+
+**P2**
+
+…
+
+---
+```
+
+Use **Proposed Action** in place of **Action** on open-question entries. Omit **Evidence** and
+**Action** only when the field table says they do not apply.
+
 Fill these fields.
 
 | Field | What goes in it |
 | --- | --- |
+| **ID** | `P<n>` — unique in this conversation; the entry heading |
 | **Category** | one or more labels from the category table below |
 | **Scope** | one or more labels from the scope table below |
 | **Severity** | `blocking` · `degrading` · `cosmetic` |
@@ -64,4 +99,4 @@ Two rules:
 
 - A pending decision never sits inside an entry about something already fixed. It stands alone.
 - A finding that contradicts an earlier "done" says so in **Action**, and corrects the earlier
-  claim in the same message.
+  claim in the same message. Cite the earlier finding by ID when it has one.

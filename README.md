@@ -13,6 +13,9 @@ to the next, kept in one place instead of being re-derived or copy-pasted per re
 MCP server definitions are also in scope for this repository; no directory has been designated for
 them yet.
 
+[`AGENTS.md`](AGENTS.md) carries the rules for authoring what lives here, addressed to an agent
+working in this repository. `CLAUDE.md` is a symlink to it, so Claude Code and Cursor read one file.
+
 ### Skills
 
 One directory per skill: a `SKILL.md` carrying YAML frontmatter (`name`, `description`) and the
@@ -32,9 +35,9 @@ type rather than the skill's own name.
 ### Instructions
 
 One file per subject, named for the subject. These are **always-on** documents: once installed
-they load at the start of every session, in every project, so each one must earn permanent
-context. Guidance that only matters while performing a particular task belongs in a skill, which
-loads on demand, or in this README, which is read by people.
+they load at the start of every session in the project they were copied into, so each one must
+earn permanent context. Guidance that only matters while performing a particular task belongs in
+a skill, which loads on demand, or in this README, which is read by people.
 
 Write each one as a **paper of commands**, not a description of how things are:
 
@@ -50,23 +53,36 @@ Write each one as a **paper of commands**, not a description of how things are:
 
 ## Install
 
-`install.sh` copies everything here into the locations each client reads at **user scope**, so
-every project on the machine picks it up without a per-project copy. macOS only.
+`install.sh` copies everything here into a **target project** you pass as an argument. One run
+writes both clients' project-local shapes.
 
 ```bash
-./install.sh            # both clients (same as --all)
-./install.sh --claude   # Claude Code only
-./install.sh --cursor   # Cursor only
+./install.sh /path/to/project
+./install.sh /path/to/project execution-planning
+./install.sh /path/to/project execution-planning,another-skill
 ```
 
-| | Skills | Instructions |
-| --- | --- | --- |
-| **Claude Code** | `~/.claude/skills/<name>/` | `~/.claude/rules/<name>.md` |
-| **Cursor** | `~/.cursor/skills/<name>/` | `~/.cursor/rules/<name>.mdc` |
+Omit the skill list to install every skill. A comma-separated list installs only those
+named skills; an unknown name is an error. Instructions are always installed.
 
-Instructions are given to each client in the shape it loads: verbatim for Claude Code, which reads
-every `.md` in `~/.claude/rules/` at session start, and wrapped in `description` / `alwaysApply`
-frontmatter for Cursor. A `README.md` in a source directory is never installed.
+The script refuses to install into this repository itself.
+
+| | Destination |
+| --- | --- |
+| **Skills** | `<project>/.agents/skills/<name>/` |
+| **Cursor rules** | `<project>/.cursor/rules/<name>.mdc` |
+| **Claude Code rules** | `<project>/.claude/rules/<name>.md` |
+
+Cursor and Codex load `.agents/skills/` natively. Claude Code's documented project skill path is
+`.claude/skills/`; this install does not write a second skill copy there, because Cursor also
+scans that directory and would register the same skill twice.
+
+Instructions are given to each client in the shape it loads: verbatim for Claude Code, and wrapped
+in `description` / `alwaysApply` frontmatter for Cursor. A `README.md` in a source directory is
+never installed.
+
+Paths written inside a skill are relative to the *consuming* project's root —
+`.agents/skills/<name>/scripts/…` — because that is where the shell starts.
 
 Where a destination already exists the script lists every collision and asks once, defaulting to
 overwrite; answering `n` skips all existing items and installs the rest. Skill folders are replaced
@@ -74,18 +90,18 @@ whole, so a file deleted here does not survive in an install.
 
 Restart the client afterwards — skills and rules are read at session start.
 
-> Cursor's global rules directory is community-documented rather than official; Cursor's own docs
-> describe User Rules only through Customize → Rules. Confirm the rules appear there after
-> installing.
+If an earlier install left copies at **user scope**, the script prints `rm` commands for those
+paths and does not delete them. Run the printed commands if you no longer want those skills and
+rules applied to every project on the machine:
 
-## Using a skill without installing
-
-Installation is the normal route. To put a single skill into one project instead, copy or symlink
-its folder into that project's `.agents/skills/` — the cross-client convention Codex and Cursor
-discover natively.
-
-Paths written inside a skill are relative to the *consuming* project's root —
-`.agents/skills/<name>/scripts/…` — because that is where the shell starts.
+```bash
+rm -rf ~/.cursor/skills/execution-planning
+rm -rf ~/.claude/skills/execution-planning
+rm -f  ~/.cursor/rules/terminology-discipline.mdc \
+       ~/.cursor/rules/problem-presentation-format.mdc
+rm -f  ~/.claude/rules/terminology-discipline.md \
+       ~/.claude/rules/problem-presentation-format.md
+```
 
 ## Contributing back
 

@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 #
-# Install this repository's skills and instructions at user scope, where every
-# project on the machine picks them up.
+# Install this repository's skills and instructions into a target project.
 #
 # Each client is given the content in the shape it actually loads: skill folders
-# copied whole, instruction documents copied verbatim for Claude Code and wrapped
-# in Cursor's rule frontmatter for Cursor.
+# copied whole into .agents/skills/, instruction documents copied verbatim for
+# Claude Code and wrapped in Cursor's rule frontmatter for Cursor.
 
 set -euo pipefail
 
@@ -13,39 +12,62 @@ SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 usage() {
     cat <<'EOF'
-Usage: install.sh [--all | --claude | --cursor]
+Usage: install.sh <project-dir> [skill,skill,...]
 
-  --all       install for both clients (default)
-  --claude    install for Claude Code only
-  --cursor    install for Cursor only
-  -h, --help  show this message
+Copy skills and instructions into <project-dir> at the paths each client
+reads for that project.
+
+  <project-dir>        target project root (required)
+  [skill,skill,...]    install only these skills (comma-separated names).
+                       Omit to install every skill.
+  -h, --help           show this message
 
 Destinations:
-  Claude Code   ~/.claude/skills/<name>/    ~/.claude/rules/<name>.md
-  Cursor        ~/.cursor/skills/<name>/    ~/.cursor/rules/<name>.mdc
-
-macOS only.
+  Skills          <project>/.agents/skills/<name>/
+  Cursor rules    <project>/.cursor/rules/<name>.mdc
+  Claude rules    <project>/.claude/rules/<name>.md
 EOF
 }
 
 # ---------------------------------------------------------------- preconditions
 
-if [[ "$(uname -s)" != "Darwin" ]]; then
-    echo "error: macOS only (found $(uname -s))" >&2
+if [[ $# -eq 1 && ( "$1" == -h || "$1" == --help ) ]]; then
+    usage
+    exit 0
+fi
+
+if [[ $# -lt 1 || $# -gt 2 ]]; then
+    echo "error: project directory required, optional skill list (got $# argument(s))" >&2
+    echo >&2
+    usage >&2
     exit 1
 fi
 
-targets=()
-case "${1:---all}" in
-    --all)      targets=(claude cursor) ;;
-    --claude)   targets=(claude) ;;
-    --cursor)   targets=(cursor) ;;
-    -h|--help)  usage; exit 0 ;;
-    *)          echo "error: unknown argument '$1'" >&2; echo >&2; usage >&2; exit 1 ;;
-esac
+if [[ "$1" == -* ]]; then
+    echo "error: unknown argument '$1'" >&2
+    echo >&2
+    usage >&2
+    exit 1
+fi
 
-if [[ $# -gt 1 ]]; then
-    echo "error: one argument at most (got $#)" >&2
+if [[ $# -eq 2 && "$2" == -* ]]; then
+    echo "error: unknown argument '$2'" >&2
+    echo >&2
+    usage >&2
+    exit 1
+fi
+
+skill_filter="${2-}"
+
+if [[ ! -d "$1" ]]; then
+    echo "error: not a directory: $1" >&2
+    exit 1
+fi
+
+PROJECT="$(cd "$1" && pwd)"
+
+if [[ "$PROJECT" == "$SRC" ]]; then
+    echo "error: refuse to install into this repository ($SRC)" >&2
     exit 1
 fi
 
@@ -63,34 +85,80 @@ done
 # an instruction and must not be installed as one.
 instructions=()
 for file in "$SRC"/instructions/*.md; do
+    [[ -f "$file" ]] || continue
     [[ "$(basename "$file")" == "README.md" ]] && continue
     instructions+=("$file")
 done
+
+if [[ -n "$skill_filter" ]]; then
+    compact="${skill_filter//[[:space:]]/}"
+    if [[ "$compact" == ,* || "$compact" == *, || "$compact" == *,,* ]]; then
+        echo "error: empty skill name in list: $skill_filter" >&2
+        exit 1
+    fi
+
+    requested=()
+    IFS=',' read -ra raw <<< "$skill_filter"
+    for token in "${raw[@]}"; do
+        name="${token#"${token%%[![:space:]]*}"}"
+        name="${name%"${name##*[![:space:]]}"}"
+        if [[ -z "$name" ]]; then
+            echo "error: empty skill name in list: $skill_filter" >&2
+            exit 1
+        fi
+        requested+=("$name")
+    done
+
+    selected=()
+    seen_csv=
+    for name in "${requested[@]}"; do
+        case ",$seen_csv," in
+            *",$name,"*) continue ;;
+        esac
+        seen_csv="${seen_csv:+$seen_csv,}$name"
+
+        found=
+        for skill in "${skills[@]}"; do
+            if [[ "$(basename "$skill")" == "$name" ]]; then
+                selected+=("$skill")
+                found=1
+                break
+            fi
+        done
+        if [[ -z "$found" ]]; then
+            echo "error: unknown skill '$name'" >&2
+            echo "available:" >&2
+            for skill in "${skills[@]}"; do
+                echo "  $(basename "$skill")" >&2
+            done
+            exit 1
+        fi
+    done
+    skills=("${selected[@]}")
+fi
 
 if [[ ${#skills[@]} -eq 0 && ${#instructions[@]} -eq 0 ]]; then
     echo "error: nothing to install — no skills or instructions found under $SRC" >&2
     exit 1
 fi
 
-skills_root_for()       { [[ "$1" == claude ]] && echo "$HOME/.claude/skills" || echo "$HOME/.cursor/skills"; }
-instructions_root_for() { [[ "$1" == claude ]] && echo "$HOME/.claude/rules"  || echo "$HOME/.cursor/rules"; }
-instruction_ext_for()   { [[ "$1" == claude ]] && echo "md" || echo "mdc"; }
+skills_root="$PROJECT/.agents/skills"
+cursor_rules_root="$PROJECT/.cursor/rules"
+claude_rules_root="$PROJECT/.claude/rules"
 
 # ------------------------------------------------------------ collision handling
 
 # Every destination that already exists is gathered before anything is written,
 # so the user answers one question about the whole run rather than one per item.
 collisions=()
-for target in "${targets[@]}"; do
-    for skill in "${skills[@]}"; do
-        dest="$(skills_root_for "$target")/$(basename "$skill")"
-        [[ -e "$dest" ]] && collisions+=("$dest")
-    done
-    for instruction in "${instructions[@]}"; do
-        name="$(basename "$instruction" .md)"
-        dest="$(instructions_root_for "$target")/${name}.$(instruction_ext_for "$target")"
-        [[ -e "$dest" ]] && collisions+=("$dest")
-    done
+for skill in "${skills[@]}"; do
+    dest="$skills_root/$(basename "$skill")"
+    [[ -e "$dest" ]] && collisions+=("$dest")
+done
+for instruction in "${instructions[@]}"; do
+    name="$(basename "$instruction" .md)"
+    [[ -e "$cursor_rules_root/${name}.mdc" ]] && collisions+=("$cursor_rules_root/${name}.mdc")
+    [[ -e "$claude_rules_root/${name}.md" ]] && collisions+=("$claude_rules_root/${name}.md")
 done
 
 overwrite=yes
@@ -134,60 +202,84 @@ write_cursor_rule() {
 installed=0
 skipped=0
 
-for target in "${targets[@]}"; do
-    skills_root="$(skills_root_for "$target")"
-    instructions_root="$(instructions_root_for "$target")"
-    ext="$(instruction_ext_for "$target")"
+mkdir -p "$skills_root" "$cursor_rules_root" "$claude_rules_root"
 
-    mkdir -p "$skills_root" "$instructions_root"
-    echo "== $target"
+echo "== $PROJECT"
 
-    for skill in "${skills[@]}"; do
-        name="$(basename "$skill")"
-        dest="$skills_root/$name"
-        if should_write "$dest"; then
-            # Replaced whole, so a file deleted upstream cannot survive here.
-            rm -rf "$dest"
-            cp -R "$skill" "$dest"
-            echo "   skill        $name -> $dest"
-            installed=$((installed + 1))
-        else
-            echo "   skill        $name -- skipped (exists)"
-            skipped=$((skipped + 1))
-        fi
-    done
-
-    for instruction in "${instructions[@]}"; do
-        name="$(basename "$instruction" .md)"
-        dest="$instructions_root/${name}.${ext}"
-        if should_write "$dest"; then
-            if [[ "$target" == cursor ]]; then
-                write_cursor_rule "$instruction" "$dest"
-            else
-                cp "$instruction" "$dest"
-            fi
-            echo "   instruction  $name -> $dest"
-            installed=$((installed + 1))
-        else
-            echo "   instruction  $name -- skipped (exists)"
-            skipped=$((skipped + 1))
-        fi
-    done
-    echo
+for skill in "${skills[@]}"; do
+    name="$(basename "$skill")"
+    dest="$skills_root/$name"
+    if should_write "$dest"; then
+        # Replaced whole, so a file deleted upstream cannot survive here.
+        rm -rf "$dest"
+        cp -R "$skill" "$dest"
+        echo "   skill             $name -> $dest"
+        installed=$((installed + 1))
+    else
+        echo "   skill             $name -- skipped (exists)"
+        skipped=$((skipped + 1))
+    fi
 done
+
+for instruction in "${instructions[@]}"; do
+    name="$(basename "$instruction" .md)"
+
+    dest="$cursor_rules_root/${name}.mdc"
+    if should_write "$dest"; then
+        write_cursor_rule "$instruction" "$dest"
+        echo "   instruction/cursor $name -> $dest"
+        installed=$((installed + 1))
+    else
+        echo "   instruction/cursor $name -- skipped (exists)"
+        skipped=$((skipped + 1))
+    fi
+
+    dest="$claude_rules_root/${name}.md"
+    if should_write "$dest"; then
+        cp "$instruction" "$dest"
+        echo "   instruction/claude $name -> $dest"
+        installed=$((installed + 1))
+    else
+        echo "   instruction/claude $name -- skipped (exists)"
+        skipped=$((skipped + 1))
+    fi
+done
+
+echo
 
 # ----------------------------------------------------------------------- report
 
 echo "Installed $installed item(s), skipped $skipped."
 
-for target in "${targets[@]}"; do
-    if [[ "$target" == cursor ]]; then
-        echo
-        echo "Note: Cursor's global rules directory (~/.cursor/rules) is community-documented;"
-        echo "      the official docs describe User Rules only through Customize -> Rules."
-        echo "      Confirm the rules appear there, and move them if Cursor expects elsewhere."
-    fi
+echo
+echo "Restart the client — skills and rules are read at session start."
+
+# -------------------------------------------------------- user-scope leftovers
+
+leftover_dirs=()
+leftover_files=()
+for skill in "${skills[@]}"; do
+    name="$(basename "$skill")"
+    [[ -e "$HOME/.cursor/skills/$name" ]] && leftover_dirs+=("$HOME/.cursor/skills/$name")
+    [[ -e "$HOME/.claude/skills/$name" ]] && leftover_dirs+=("$HOME/.claude/skills/$name")
+done
+for instruction in "${instructions[@]}"; do
+    name="$(basename "$instruction" .md)"
+    [[ -e "$HOME/.cursor/rules/${name}.mdc" ]] && leftover_files+=("$HOME/.cursor/rules/${name}.mdc")
+    [[ -e "$HOME/.claude/rules/${name}.md" ]] && leftover_files+=("$HOME/.claude/rules/${name}.md")
 done
 
 echo
-echo "Restart the client — skills and rules are read at session start."
+if [[ ${#leftover_dirs[@]} -eq 0 && ${#leftover_files[@]} -eq 0 ]]; then
+    echo "No user-scope leftovers from an earlier install."
+else
+    echo "User-scope leftovers from an earlier install (safe to remove if you no longer"
+    echo "want these applied to every project):"
+    echo
+    for dest in "${leftover_dirs[@]}"; do
+        echo "  rm -rf $dest"
+    done
+    for dest in "${leftover_files[@]}"; do
+        echo "  rm -f $dest"
+    done
+fi
