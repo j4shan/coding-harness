@@ -31,7 +31,9 @@ skills/
 
 The `description` is what a client matches a task against, so it states both what the skill
 produces and the situations that should trigger it — including phrasings a user would actually
-type rather than the skill's own name.
+type rather than the skill's own name. A skill with `disable-model-invocation: true` is the
+exception: the agent must not apply it from context. It loads only when the user types
+`/<name>` in chat.
 
 ### Instructions
 
@@ -137,9 +139,11 @@ longer want those skills, rules, and subagents applied to every project on the m
 rm -rf ~/.cursor/skills/execution-planning
 rm -rf ~/.claude/skills/execution-planning
 rm -f  ~/.cursor/rules/terminology-discipline.mdc \
-       ~/.cursor/rules/problem-presentation-format.mdc
+       ~/.cursor/rules/problem-presentation-format.mdc \
+       ~/.cursor/rules/project-metadata-guideline.mdc
 rm -f  ~/.claude/rules/terminology-discipline.md \
-       ~/.claude/rules/problem-presentation-format.md
+       ~/.claude/rules/problem-presentation-format.md \
+       ~/.claude/rules/project-metadata-guideline.md
 rm -f  ~/.cursor/agents/cursor-grok-4.6-high.md
 ```
 

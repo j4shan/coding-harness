@@ -67,7 +67,8 @@ Apply to every file that ships.
 
 Apply to every `skills/<name>/SKILL.md`.
 
-- Give the frontmatter `name` and `description`, nothing else.
+- Give the frontmatter `name` and `description`. Add `disable-model-invocation: true` when the
+  skill must load only on explicit `/name` invocation. Add nothing else.
 - State in `description` both what the skill produces and the situations that should trigger it.
 - Include the phrasings a user would actually type. Never make matching depend on the skill's own name.
 - Keep executable helpers in the skill's own `scripts/`, and cite them by a path relative to the

@@ -4,8 +4,11 @@
 # An item on disk but missing here is treated as true.
 skills:
   execution-planning: true
+  python-image-generation: true
+  technical-writing: true
 instructions:
   problem-presentation-format: true
+  project-metadata-guideline: true
   terminology-discipline: false
 subagents:
   claude-opus-5-high: true
