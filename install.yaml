@@ -4,7 +4,7 @@
 # An item on disk but missing here is treated as true.
 skills:
   execution-planning: true
-  python-image-generation: true
+  figure-authoring: true
   technical-writing: true
 instructions:
   problem-presentation-format: true

@@ -1,0 +1,181 @@
+<mxfile host="Electron">
+  <diagram id="tVsUVjq0qLgt3KjqlkNK" name="pageWithNumber">
+    <mxGraphModel grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object label="Confirm draw.io&#xa;is available" spec_id="s1" spec_category="gate" id="s1">
+          <mxCell parent="1" style="rhombus;fillColor=#ffe6cc;strokeColor=#d79b00;fontFamily=Helvetica;fontSize=12;whiteSpace=wrap;html=1;" vertex="1">
+            <mxGeometry height="80" width="210" x="271.33" y="12" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Collect requirements&#xa;into a prompt" spec_id="s2" spec_category="step" id="s2">
+          <mxCell parent="1" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Helvetica;fontSize=12;whiteSpace=wrap;html=1;" vertex="1">
+            <mxGeometry height="60" width="195" x="313.83" y="182" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Complete the&#xa;specification" spec_id="s3" spec_category="step" id="s3">
+          <mxCell parent="1" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Helvetica;fontSize=12;whiteSpace=wrap;html=1;" vertex="1">
+            <mxGeometry height="60" width="190" x="316.33" y="272" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Generate the&#xa;diagram source" spec_id="s4" spec_category="step" id="s4">
+          <mxCell parent="1" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Helvetica;fontSize=12;whiteSpace=wrap;html=1;" vertex="1">
+            <mxGeometry height="60" width="190" x="348" y="364" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Validate, lay out,&#xa;export, display" spec_id="s5" spec_category="step" id="s5">
+          <mxCell parent="1" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Helvetica;fontSize=12;whiteSpace=wrap;html=1;" vertex="1">
+            <mxGeometry height="60" width="190" x="395.5" y="466" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Verify by&#xa;looking" spec_id="s6" spec_category="step" id="s6">
+          <mxCell parent="1" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Helvetica;fontSize=12;whiteSpace=wrap;html=1;" vertex="1">
+            <mxGeometry height="60" width="190" x="202.17" y="558" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="resources/img_prompt/&#xa;&amp;lt;figure&amp;gt;_prompt.md" spec_id="a1" spec_category="artifact" id="a1">
+          <mxCell parent="1" style="shape=note;size=14;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Courier New;fontSize=10;whiteSpace=wrap;html=1;" vertex="1">
+            <mxGeometry height="60" width="252" x="66" y="364" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="resources/img/&#xa;&amp;lt;figure&amp;gt;.drawio" spec_id="a2" spec_category="artifact" id="a2">
+          <mxCell parent="1" style="shape=note;size=14;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Courier New;fontSize=10;whiteSpace=wrap;html=1;" vertex="1">
+            <mxGeometry height="60" width="200" x="12" y="466" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="resources/img/&#xa;&amp;lt;figure&amp;gt;.png" spec_id="a3" spec_category="artifact" id="a3">
+          <mxCell parent="1" style="shape=note;size=14;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Courier New;fontSize=10;whiteSpace=wrap;html=1;" vertex="1">
+            <mxGeometry height="60" width="200" x="422.17" y="558" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Deliver the source&#xa;unrendered" spec_id="f1" spec_category="fallback" id="f1">
+          <mxCell parent="1" style="rounded=1;dashed=1;fillColor=#f5f5f5;strokeColor=#666666;fontFamily=Helvetica;fontSize=12;whiteSpace=wrap;html=1;" vertex="1">
+            <mxGeometry height="55" width="180" x="103.83" y="182" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="found" spec_id="fl.s1-s2" spec_category="edge" id="fl.s1-s2">
+          <mxCell edge="1" parent="1" source="s1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontFamily=Helvetica;fontSize=10;html=1;curved=0;exitX=0.6667;exitY=0.8333;entryX=0.5;entryY=0;" target="s2">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint y="1" as="offset" />
+              <Array as="points">
+                <mxPoint x="411.33" y="137" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object label="" spec_id="fl.s2-s3" spec_category="edge" id="fl.s2-s3">
+          <mxCell edge="1" parent="1" source="s2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontFamily=Helvetica;fontSize=10;html=1;curved=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="s3">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="411.33" y="257" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object label="" spec_id="fl.s3-s4" spec_category="edge" id="fl.s3-s4">
+          <mxCell edge="1" parent="1" source="s3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontFamily=Helvetica;fontSize=10;html=1;curved=0;exitX=0.6667;exitY=1;entryX=0.5;entryY=0;" target="s4">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="443" y="348" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object label="" spec_id="fl.s4-s5" spec_category="edge" id="fl.s4-s5">
+          <mxCell edge="1" parent="1" source="s4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontFamily=Helvetica;fontSize=10;html=1;curved=0;exitX=0.75;exitY=1;entryX=0.5;entryY=0;" target="s5">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="490.5" y="445" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object label="" spec_id="fl.s5-s6" spec_category="edge" id="fl.s5-s6">
+          <mxCell edge="1" parent="1" source="s5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontFamily=Helvetica;fontSize=10;html=1;curved=0;exitX=0.3333;exitY=1;entryX=0.6666;entryY=0;" target="s6">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="458.83" y="542" />
+                <mxPoint x="328.83" y="542" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object label="missing" spec_id="fb.s1-f1" spec_category="edge" id="fb.s1-f1">
+          <mxCell edge="1" parent="1" source="s1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;strokeColor=#666666;fontFamily=Helvetica;fontSize=10;html=1;curved=0;exitX=0.3333;exitY=0.8333;entryX=0.5;entryY=0;" target="f1">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="-44.75" y="30" as="offset" />
+              <Array as="points">
+                <mxPoint x="341.33" y="108" />
+                <mxPoint x="193.83" y="108" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object label="" spec_id="pr.s3-a1" spec_category="edge" id="pr.s3-a1">
+          <mxCell edge="1" parent="1" source="s3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;strokeColor=#6c8ebf;fontFamily=Helvetica;fontSize=10;html=1;curved=0;exitX=0.3334;exitY=1;entryX=0.5;entryY=0;" target="a1">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="379.67" y="348" />
+                <mxPoint x="192" y="348" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object label="" spec_id="pr.s4-a2" spec_category="edge" id="pr.s4-a2">
+          <mxCell edge="1" parent="1" source="s4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;strokeColor=#6c8ebf;fontFamily=Helvetica;fontSize=10;html=1;curved=0;exitX=0.25;exitY=1;entryX=0.5;entryY=0;" target="a2">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="395.5" y="440" />
+                <mxPoint x="112" y="440" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object label="" spec_id="pr.s5-a3" spec_category="edge" id="pr.s5-a3">
+          <mxCell edge="1" parent="1" source="s5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;strokeColor=#6c8ebf;fontFamily=Helvetica;fontSize=10;html=1;curved=0;exitX=0.6667;exitY=1;entryX=0.5;entryY=0;" target="a3">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="522.17" y="542" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object label="on defect" spec_id="rv.s6-s4" spec_category="edge" id="rv.s6-s4">
+          <mxCell edge="1" parent="1" source="s6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;dashPattern=1 3;strokeColor=#b85450;fontFamily=Helvetica;fontSize=10;html=1;curved=0;exitX=0.3333;exitY=0;entryX=0.5;entryY=1;" target="s4">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="-47.75" y="46" as="offset" />
+              <Array as="points">
+                <mxPoint x="265.5" y="450" />
+                <mxPoint x="443" y="450" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+          <object id="an.title" label="Figure authoring" spec_id="an.title" spec_category="annotation"><mxCell style="text;html=1;fontFamily=Helvetica;fontSize=18;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="12.0" y="-62" width="640" height="22" as="geometry"/></mxCell></object>
+    <object id="an.caption" label="6 ordered steps produce 3 retained artifacts, rendered on the local machine" spec_id="an.caption" spec_category="annotation"><mxCell style="text;html=1;fontFamily=Helvetica;fontSize=11;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="12.0" y="-36" width="640" height="22" as="geometry"/></mxCell></object>
+    <object id="an.legend" label="Legend" spec_id="an.legend" spec_category="annotation"><mxCell style="text;html=1;fontFamily=Helvetica;fontSize=12;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="12.0" y="638.0" width="300" height="22" as="geometry"/></mxCell></object>
+    <object id="lg.cat0" spec_id="lg.cat0" spec_category="legend_key"><mxCell style="rhombus;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="12.0" y="664.0" width="34" height="22" as="geometry"/></mxCell></object>
+    <object id="lg.cat0.t" label="Gate - a check that can stop the run" spec_id="lg.cat0.t" spec_category="annotation"><mxCell style="text;html=1;fontFamily=Helvetica;fontSize=11;" vertex="1" parent="1"><mxGeometry x="54.0" y="664.0" width="260" height="22" as="geometry"/></mxCell></object>
+    <object id="lg.cat1" spec_id="lg.cat1" spec_category="legend_key"><mxCell style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="12.0" y="694.0" width="34" height="22" as="geometry"/></mxCell></object>
+    <object id="lg.cat1.t" label="Step - work the skill performs" spec_id="lg.cat1.t" spec_category="annotation"><mxCell style="text;html=1;fontFamily=Helvetica;fontSize=11;" vertex="1" parent="1"><mxGeometry x="54.0" y="694.0" width="260" height="22" as="geometry"/></mxCell></object>
+    <object id="lg.cat2" spec_id="lg.cat2" spec_category="legend_key"><mxCell style="shape=note;size=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="12.0" y="724.0" width="34" height="22" as="geometry"/></mxCell></object>
+    <object id="lg.cat2.t" label="Artifact - a file left behind" spec_id="lg.cat2.t" spec_category="annotation"><mxCell style="text;html=1;fontFamily=Helvetica;fontSize=11;" vertex="1" parent="1"><mxGeometry x="54.0" y="724.0" width="260" height="22" as="geometry"/></mxCell></object>
+    <object id="lg.cat3" spec_id="lg.cat3" spec_category="legend_key"><mxCell style="rounded=1;dashed=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1"><mxGeometry x="12.0" y="754.0" width="34" height="22" as="geometry"/></mxCell></object>
+    <object id="lg.cat3.t" label="Fallback - draw.io absent" spec_id="lg.cat3.t" spec_category="annotation"><mxCell style="text;html=1;fontFamily=Helvetica;fontSize=11;" vertex="1" parent="1"><mxGeometry x="54.0" y="754.0" width="260" height="22" as="geometry"/></mxCell></object>
+    <object id="lg.ln0a" spec_id="lg.ln0a" spec_category="legend_anchor"><mxCell style="opacity=0;" vertex="1" parent="1"><mxGeometry x="332.0" y="675.0" width="1" height="1" as="geometry"/></mxCell></object>
+    <object id="lg.ln0b" spec_id="lg.ln0b" spec_category="legend_anchor"><mxCell style="opacity=0;" vertex="1" parent="1"><mxGeometry x="376.0" y="675.0" width="1" height="1" as="geometry"/></mxCell></object>
+    <object id="lg.ln0" spec_id="lg.ln0" spec_category="legend_key"><mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="lg.ln0a" target="lg.ln0b"><mxGeometry relative="1" as="geometry"/></mxCell></object>
+    <object id="lg.ln0.t" label="proceeds to" spec_id="lg.ln0.t" spec_category="annotation"><mxCell style="text;html=1;fontFamily=Helvetica;fontSize=11;" vertex="1" parent="1"><mxGeometry x="386.0" y="664.0" width="240" height="22" as="geometry"/></mxCell></object>
+    <object id="lg.ln1a" spec_id="lg.ln1a" spec_category="legend_anchor"><mxCell style="opacity=0;" vertex="1" parent="1"><mxGeometry x="332.0" y="705.0" width="1" height="1" as="geometry"/></mxCell></object>
+    <object id="lg.ln1b" spec_id="lg.ln1b" spec_category="legend_anchor"><mxCell style="opacity=0;" vertex="1" parent="1"><mxGeometry x="376.0" y="705.0" width="1" height="1" as="geometry"/></mxCell></object>
+    <object id="lg.ln1" spec_id="lg.ln1" spec_category="legend_key"><mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="lg.ln1a" target="lg.ln1b"><mxGeometry relative="1" as="geometry"/></mxCell></object>
+    <object id="lg.ln1.t" label="produces" spec_id="lg.ln1.t" spec_category="annotation"><mxCell style="text;html=1;fontFamily=Helvetica;fontSize=11;" vertex="1" parent="1"><mxGeometry x="386.0" y="694.0" width="240" height="22" as="geometry"/></mxCell></object>
+    <object id="lg.ln2a" spec_id="lg.ln2a" spec_category="legend_anchor"><mxCell style="opacity=0;" vertex="1" parent="1"><mxGeometry x="332.0" y="735.0" width="1" height="1" as="geometry"/></mxCell></object>
+    <object id="lg.ln2b" spec_id="lg.ln2b" spec_category="legend_anchor"><mxCell style="opacity=0;" vertex="1" parent="1"><mxGeometry x="376.0" y="735.0" width="1" height="1" as="geometry"/></mxCell></object>
+    <object id="lg.ln2" spec_id="lg.ln2" spec_category="legend_key"><mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;dashPattern=1 3;strokeColor=#b85450;" edge="1" parent="1" source="lg.ln2a" target="lg.ln2b"><mxGeometry relative="1" as="geometry"/></mxCell></object>
+    <object id="lg.ln2.t" label="revise on defect" spec_id="lg.ln2.t" spec_category="annotation"><mxCell style="text;html=1;fontFamily=Helvetica;fontSize=11;" vertex="1" parent="1"><mxGeometry x="386.0" y="724.0" width="240" height="22" as="geometry"/></mxCell></object>
+  </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
