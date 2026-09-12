@@ -1,6 +1,6 @@
 # Problem presentation format
 
-**Objective.** Report every problem, defect and open decision in one fixed table, so the
+**Objective.** Report every problem, defect and open decision in one fixed layout, so the
 reader can tell at a glance what still needs their attention, how bad it is, and which part of the
 system is at risk. Number every finding so later messages can cite it.
 
@@ -30,18 +30,21 @@ Do not assume the reader's knowledge in code. Illustrate the point using product
 concepts, requirements, constraints and documented terms. When you need a code reference, place
 the citation at the end of the field in this format: `[<relative_file_path>/<file_name>: <line_#>]`.
 
-Render each entry as one HTML table with two vertical sections. Never use a list of bold labels.
-Never split one entry across two tables. Never omit a field. Write a markdown thematic break
-(`---` on its own line) before the first entry, between every pair of entries, and after the last
-entry. Never omit a break because there is only one finding. Never write two breaks in a row.
+Render each entry as one markdown block with two vertical sections. Never use a list of bold
+labels for the upper fields. Never omit a field. Write a markdown thematic break (`---` on its
+own line) before the first entry, between every pair of entries, and after the last entry.
+Never omit a break because there is only one finding. Never write two breaks in a row.
 
-Upper section: one header row and one value row for **Category**, **Scope**, **Severity**,
-**Components**, and **Status**.
+Upper section: one GitHub-flavored markdown table — one header row and one value row for
+**Category**, **Scope**, **Severity**, **Components**, and **Status**. Keep each value on a
+single line so the table stays one row.
 
-Lower section: two blocks, each a header row that spans every column then a content row that
-spans every column — **Problem Description**, then **Proposed Action**.
+Lower section: two blocks, each a bold heading on its own line then the body on the following
+lines — **Problem Description**, then **Proposed Action**. Write the body as ordinary
+markdown prose so it can wrap. Never put either body in a table cell.
 
-Render the table as HTML so the lower rows can span every column. Do not fake a merge with empty
+Write GitHub-flavored markdown only. Never write HTML tags. Chat clients display `<table>`,
+`<tr>`, `<th>`, `<td>`, and `colspan` as raw markup. Do not fake a merged cell with empty
 markdown cells.
 
 ```
@@ -49,26 +52,17 @@ markdown cells.
 
 **P1**
 
-<table>
-<tr>
-<th>Category</th>
-<th>Scope</th>
-<th>Severity</th>
-<th>Components</th>
-<th>Status</th>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-<tr><th colspan="5">Problem Description</th></tr>
-<tr><td colspan="5">…</td></tr>
-<tr><th colspan="5">Proposed Action</th></tr>
-<tr><td colspan="5">…</td></tr>
-</table>
+| Category | Scope | Severity | Components | Status |
+| --- | --- | --- | --- | --- |
+| … | … | … | … | … |
+
+**Problem Description**
+
+…
+
+**Proposed Action**
+
+…
 
 ---
 

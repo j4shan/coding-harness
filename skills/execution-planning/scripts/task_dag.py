@@ -1,33 +1,32 @@
 #!/usr/bin/env python3
-"""Build a numbered task table from goals, category slices, and intra-goal edges.
+"""Build a numbered task table from goals, category tasks, and intra-goal edges.
 
-Pass slices as `goal:category:id` and pairs as `prerequisite > dependent`.
-The tool numbers every slice `T1`, `T2`, … so a prerequisite always sits above
-the work that waits on it, then prints one markdown row per slice.
+Pass tasks as `goal:category:id` and pairs as `prerequisite > dependent`.
+The tool numbers every task `T1`, `T2`, … so a prerequisite always sits above
+the work that waits on it, then prints one markdown row per task.
 
-Goals are serial. Category slices are the only parallel dimension. This tool
+Goals are serial. Category tasks are the only parallel dimension. This tool
 inserts a goal-cut edge from every sink of goal *i* to every source of goal
 *i+1*. Write only intra-goal pairs; do not add those cuts by hand.
 
-Each row shows both sides of every edge, including goal-cuts:
-
-- **Depends on** — work that must finish before this slice can start
-- **Unblocks** — work that can start once this slice finishes
+Each row shows the work that must finish before that task can start, including
+goal-cut edges. The table states what is true when the plan is written, so it
+carries no status column and no reverse-edge column.
 
 Categories are `code`, `config`, `docs`, `assets`. A goal may have at most one
-slice per category.
+task per category.
 
 Usage:
     task_dag.py --goal-order add-cache,ship \\
-        --slice add-cache:code:implement --slice add-cache:config:wire-ci \\
-        --slice ship:docs:spec-sync "implement > wire-ci"
+        --task add-cache:code:implement --task add-cache:config:wire-ci \\
+        --task ship:docs:spec-sync "implement > wire-ci"
     task_dag.py --format scaffold --title "Add caching" \\
-        --slice add-cache:code:implement --slice add-cache:docs:notes
+        --task add-cache:code:implement --task add-cache:docs:notes
     echo '{"goals":["g"],"tasks":[{"id":"a","goal":"g","category":"code"}],"edges":[]}' \\
         | task_dag.py
-    task_dag.py --format table --slice g:code:a --slice g:config:b "a > b"
+    task_dag.py --format table --task g:code:a --task g:config:b "a > b"
 
-A cycle, an empty goal, a second slice in the same goal and category, or a
+A cycle, an empty goal, a second task in the same goal and category, or a
 cross-goal pair exits with status 1.
 """
 
@@ -273,23 +272,22 @@ def render_goals(dag: dict) -> str:
 
 
 def render_table(dag: dict) -> str:
-    """Print the slices as an unfenced markdown table.
+    """Print the tasks as an unfenced markdown table.
 
-    Depends on answers "can this start?" Unblocks answers "what can start
-    next?" Both columns include goal-cut edges so the reader does not have
-    to invert the table.
+    Depends on answers "can this start?" and includes goal-cut edges. The
+    plan is a static document, so the table carries no status column, and no
+    reverse-edge column that could contradict Depends on.
     """
     labels = dag["labels"]
     lines = [
-        "| Task # | Goal | Category | Task | Depends on | Unblocks | Success criterion | Status |",
-        "|---|---|---|---|---|---|---|---|",
+        "| Task # | Goal | Category | Task | Depends on | Success criterion |",
+        "|---|---|---|---|---|---|",
     ]
     for task in dag["tasks"]:
         depends = _cell_edges(task["prereqs"], labels)
-        unblocks = _cell_edges(task["dependents"], labels)
         lines.append(
             f"| {task['label']} | {task['goal']} | {task['category']} | {task['id']} "
-            f"| {depends} | {unblocks} | <observable check> | pending |"
+            f"| {depends} | <observable check> |"
         )
     return "\n".join(lines)
 
@@ -333,7 +331,8 @@ def render_task_assignment(dag: dict) -> list[str]:
     ]
     for task in dag["tasks"]:
         lines.append(
-            f"| {task['label']} | <Grok / high, GPT-Sol / medium, Kimi K3 / high, Grok / medium, or Gemini Flash / high> | <why this model> |"
+            f"| {task['label']} | <cursor-grok-4.6-high, gpt-5.6-sol-medium, kimi-k3-high, "
+            f"cursor-grok-4.6-medium, or gemini-3.7-flash-high> | <why this model> |"
         )
     return lines
 
@@ -348,7 +347,7 @@ def render_task_bodies(dag: dict) -> list[str]:
             "",
             "**Files**",
             "",
-            "- <path in this slice's category>",
+            "- <path in this task's category>",
             "",
             "**Consumes**",
             "",
@@ -413,34 +412,24 @@ def render_scaffold(dag: dict, title: str) -> str:
             "| <clause id or heading> | <product requirements / implementation guidelines> "
             "| <add / amend / remove> | <Task #> |",
             "",
-            "## Execution Protocol",
+            "## Execution Guidelines",
             "",
-            "Do not start any slice until `Confirm plan? [1. Yes / 2. No]` has been",
-            "answered `1`. Wait for the answer. On `2`, revise the plan; start no slice.",
+            "Do not start any task until `Confirm plan? [1. Yes / 2. No]` has been",
+            "answered `1`. Wait for the answer. On `2`, revise the plan; start no task.",
             "",
-            "If this plan has a spec sync slice, show the `## Spec Sync` table and ask",
-            "`Confirm spec update? [1. Yes / 2. No]` before any slice starts. Wait for",
-            "the answer. On `2`, mark that slice `waived`, record a waiver line below,",
-            "and continue the rest of the graph.",
+            "If this plan has a spec sync task, show the `## Spec Sync` table and ask",
+            "`Confirm spec update? [1. Yes / 2. No]` before any task starts. Wait for",
+            "the answer. On `2`, drop that task, write one line here saying why, and",
+            "re-run the tool so the numbering stays generated.",
             "",
-            "Goals are serial. Category slices are the only parallel dimension. Start a",
-            "slice when every `Depends on` entry is `done` or `waived` and every slice of",
-            "every earlier goal is `done` or `waived` (never `failed` or `blocked`). Mark",
-            "the row `in_progress`, then `done` or `failed`. Status is only",
-            "`pending | in_progress | done | failed | blocked | waived`.",
+            "Goals are serial, and category tasks are the only parallel dimension.",
+            "Within a goal, tasks with no edge between them run in parallel, at most",
+            "one per category, and the ready `subagent:` ones launch in one message",
+            "with multiple `Agent` calls. Intra-goal edges still bind, so not every",
+            "task of a goal is parallel.",
             "",
-            "When several slices of the current goal are ready, launch the `subagent:`",
-            "ones in one message with multiple `Agent` calls (at most one per category).",
-            "Intra-goal edges still bind.",
-            "",
-            "On `failed`, mark every reachable dependent `blocked`. Other category slices",
-            "of the same goal may continue. Later goals stay `blocked`. On a wrong or",
-            "missing edge, stop, fix the pairs, re-run the tool, and replace the tables.",
-            "Never patch numbering by hand.",
-            "",
-            "**Waivers** <!-- omit this heading until a waiver exists; then one line per item -->",
-            "",
-            "- <what was dropped, and why>",
+            "On a wrong or missing edge, fix the pairs, re-run the tool, and replace",
+            "the tables. Never patch numbering by hand.",
         ]
     )
 
@@ -461,18 +450,19 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("pairs", nargs="*", help="intra-goal pairs, 'prerequisite > dependent'")
     parser.add_argument(
+        "--task",
         "--slice",
         action="append",
         default=[],
         dest="slices",
-        help="a slice 'goal:category:id' (category is code, config, docs, or assets)",
+        help="a task 'goal:category:id' (category is code, config, docs, or assets)",
     )
     parser.add_argument(
         "--goal-order",
         action="append",
         default=[],
         dest="goal_order",
-        help="serial goal ids, comma-separated; inferred from --slice if omitted",
+        help="serial goal ids, comma-separated; inferred from --task if omitted",
     )
     parser.add_argument(
         "--format",

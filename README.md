@@ -10,6 +10,7 @@ to the next, kept in one place instead of being re-derived or copy-pasted per re
 | [`skills/`](skills/) | [Agent Skills](https://agentskills.io) folders — one directory per skill |
 | [`instructions/`](instructions/) | Instruction documents read by an agent — working conventions, review and reporting formats, authoring rules |
 | [`subagents/`](subagents/) | Cursor subagent definitions — Markdown files a parent agent can delegate to |
+| [`tests/`](tests/) | Tests over the executable helpers that skills ship — run from the repository root, never installed into a target project |
 
 MCP server definitions are also in scope for this repository; no directory has been designated for
 them yet.
@@ -28,6 +29,11 @@ skills/
     SKILL.md
     scripts/
 ```
+
+A skill's `scripts/` are copied with it, so a skill cites its own helpers by a path relative to
+the *consuming* project's root. Tests over those helpers live in [`tests/`](tests/) at this
+repository's root instead, which `install.sh` does not copy, so they never reach a target project.
+Run them with `python3 -m unittest discover tests`.
 
 The `description` is what a client matches a task against, so it states both what the skill
 produces and the situations that should trigger it — including phrasings a user would actually

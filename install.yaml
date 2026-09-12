@@ -9,7 +9,6 @@ skills:
 instructions:
   problem-presentation-format: true
   project-metadata-guideline: true
-  terminology-discipline: false
 subagents:
   claude-opus-5-high: true
   cursor-grok-4.6-high: true
