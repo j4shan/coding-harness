@@ -41,6 +41,14 @@ type rather than the skill's own name. A skill with `disable-model-invocation: t
 exception: the agent must not apply it from context. It loads only when the user types
 `/<name>` in chat.
 
+Bundled skills:
+
+| Skill | Purpose |
+| --- | --- |
+| `execution-planning` | Build execution plans and task DAGs for multi-step work. |
+| `technical-writing` | Produce teaching-style technical explanations. |
+| `visualize_with_drawio` | Create draw.io visualizations from written specifications. |
+
 ### Instructions
 
 One file per subject, named for the subject. These are **always-on** documents: once installed
